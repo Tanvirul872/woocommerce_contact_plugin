@@ -11,6 +11,90 @@
  */
 
 
+function add_theme_scripts() {
+    wp_enqueue_style( 'style', PLUGINS_URL.'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css','',1 );
+
+//    wp_enqueue_style( 'slider', get_template_directory_uri() . '/css/slider.css', array(), '1.1', 'all' );
+
+}
+add_action( 'wp_enqueue_scripts', 'add_theme_scripts' );
+
+
+
+function ti_custom_javascript() {
+    ?>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        //(function ($) {
+        //    $('#enquiry').submit(function (event) {
+        //        event.preventDefault();
+        //
+        //        alert('jeeeeeee') ;
+        //
+        //
+        //        var endpoint = '<?php //echo admin_url('admin-ajax.php'); ?>//';
+        //        // var form = $('#enquiry').serialize();
+        //        var form = $("#enquiry").find("input[name!='g-recaptcha-response'],textarea[name='Enquiry']").serialize();
+        //        var formdata = new FormData;
+        //
+        //
+        //
+        //        formdata.append('action', 'enquiry');
+        //        formdata.append('enquiry', form);
+        //
+        //        $('#imgenquiry').css('display', 'inline-block');
+        //        $('#submit').css('display', 'none');
+        //
+        //
+        //
+        //
+        //        $.ajax(endpoint, {
+        //            type: 'POST',
+        //            data: formdata,
+        //            processData: false,
+        //            contentType: false,
+        //            success: function (res) {
+        //
+        //
+        //                $("#myModal").modal('show');
+        //
+        //
+        //                $('#imgenquiry').css('display', 'none');
+        //                $('#submit').css('display', 'inline-block');
+        //                $('#enquiry').fadeOut(200);
+        //                // $('#success_message').text('Thanks for your enquiry').show();
+        //                $('#enquiry').trigger('reset');
+        //                $('#enquiry').fadeIn(500);
+        //
+        //            },
+        //
+        //            error: function (err) {
+        //
+        //            }
+        //        })
+        //
+        //    })
+        //})(jQuery)
+
+
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+
+
+    </script>
+    <?php
+}
+add_action('admin_enqueue_scripts', 'ti_custom_javascript');
+
+
+
+
 add_action('admin_menu','myThemeOption');
 if(!function_exists('myThemeOption')){
     function myThemeOption(){
@@ -53,8 +137,8 @@ function custom_plugin_func(){
         $billing_email = $skip_duplicate = array();
         $customer_orders = get_posts( array(
             'post_type'   => 'shop_order',
-                'post_status' =>'wc-processing', // change accordingly
-            'posts_per_page' => '3'
+            'post_status' =>'wc-processing','wc-completed', // change accordingly
+//            'posts_per_page' => '3'
         ) );
 
 
@@ -84,19 +168,15 @@ function custom_plugin_func(){
     ?>
 
 
-    <h1>The input element</h1>
+    <h1> Customer Email </h1>
 
-    <form action="/action_page.php">
-        <label for="fname">First name:</label>
-        <input type="text" id="fname" name="fname"><br><br>
-        <label for="lname">Last name:</label>
-        <input type="text" id="lname" name="lname"><br><br>
+    <form action="#" id="enquiry">
 
-        <select id="cars">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
+        <label for="c_mail"> Customer Email :</label>
+        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+            <?php foreach($billing_email as $billing_emails){ ?>
+              <option value="<?php echo $billing_emails ; ?>"><?php echo $billing_emails ; ?></option>
+            <?php  }  ?>
         </select>
 
 
